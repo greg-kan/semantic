@@ -1,0 +1,22 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX zzz: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oi: <http://kazniisa/npa-ontology#>
+
+SELECT ?cls ?l ?d ?cntDescr
+WHERE {
+	?cls rdfs:label ?l ;
+		 rdfs:comment ?d . 
+	{
+		SELECT ?cls ?label (COUNT(?description) AS ?cntDescr)
+		WHERE {
+			?cls a owl:Class .
+			?cls rdfs:label ?label . 
+			?cls rdfs:comment ?description . 
+		}
+		GROUP BY ?cls ?label
+		HAVING (COUNT(?description) > 1)
+	}
+}
+
+ORDER BY ?l

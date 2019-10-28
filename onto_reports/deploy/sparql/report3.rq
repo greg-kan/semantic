@@ -1,0 +1,80 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX zzz: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oi: <http://kazniisa/npa-ontology#>
+
+SELECT * 
+WHERE {
+	
+{
+
+SELECT DISTINCT ("a" AS ?f) ?cnt (?cls AS ?c) (?lab as ?l) (?cls AS ?cl) (?lab AS ?lbl) (?desc AS ?dsc) ("" AS ?com)
+WHERE {
+
+{
+	SELECT ?cls (COUNT(?scls) AS ?cnt) 
+	WHERE {
+		?cls a owl:Class .
+	  	?scls a owl:Class .
+    	?cls rdfs:subClassOf ?scls .
+	}
+	GROUP BY ?cls 
+	HAVING (COUNT(?scls)  > 1)
+}
+
+	?cls rdfs:subClassOf ?sup .
+	?sup a owl:Class .
+	?cls rdfs:label ?lab .
+	?sup rdfs:label ?suplab .
+	OPTIONAL {?cls rdfs:comment ?desc . }
+	OPTIONAL {?sup rdfs:comment ?supdesc . }
+}
+
+}
+
+
+UNION
+
+{
+SELECT DISTINCT ("b" AS ?f) ?cnt (?cls AS ?c) (?lab as ?l) (?sup AS ?cl) (?suplab AS ?lbl) (?supdesc AS ?dsc) (COALESCE(?co, "") AS ?com)
+WHERE {
+
+{
+	SELECT ?cls (COUNT(?scls) AS ?cnt) 
+	WHERE {
+		?cls a owl:Class .
+	  	?scls a owl:Class .
+    	?cls rdfs:subClassOf ?scls .
+	}
+	GROUP BY ?cls 
+	HAVING (COUNT(?scls)  > 1)
+}
+
+	?cls rdfs:subClassOf ?sup .
+	?sup a owl:Class .
+
+	OPTIONAL {
+    ?s a owl:Axiom ;
+    owl:annotatedSource ?cls ;
+    owl:annotatedProperty rdfs:subClassOf ;
+    owl:annotatedTarget ?sup .
+    ?s rdfs:comment ?co . 
+	}
+
+#  ?s a owl:Axiom ;
+#    owl:annotatedSource ?cls ;
+#    owl:annotatedProperty rdfs:subClassOf ;
+#    owl:annotatedTarget ?sup .
+#    OPTIONAL {?s rdfs:comment ?com . }
+
+	?cls rdfs:label ?lab .
+	?sup rdfs:label ?suplab .
+	OPTIONAL {?cls rdfs:comment ?desc . }
+	OPTIONAL {?sup rdfs:comment ?supdesc . }
+}
+
+}
+
+
+}
+ORDER BY ?l ?c ?f ?cl

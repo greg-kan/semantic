@@ -1,0 +1,51 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX zzz: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX oi: <http://kazniisa/npa-ontology#>
+
+SELECT *
+WHERE {
+
+{
+
+SELECT DISTINCT ("a" AS ?f) (?class AS ?c) (?label AS ?l) (?class AS ?cls) (?label AS ?lbl) (?description AS ?dsc) ("" AS ?com)
+WHERE {
+  ?class a owl:Class .
+  ?class owl:equivalentClass ?eqclass .
+  ?class rdfs:label ?label .
+  ?eqclass rdfs:label ?eqlabel .  
+  OPTIONAL { ?class rdfs:comment ?description . }
+  OPTIONAL { ?eqclass rdfs:comment ?eqdescription . }
+}
+
+}
+
+UNION
+
+{
+
+SELECT DISTINCT ("b" AS ?f) (?class AS ?c) (?label AS ?l) (?eqclass AS ?cls) (?eqlabel AS ?lbl) (?eqdescription AS ?dsc) (COALESCE(?co, "") AS ?com)
+WHERE {
+  ?class a owl:Class .
+  ?class owl:equivalentClass ?eqclass .
+
+  OPTIONAL {
+  ?s a owl:Axiom ;
+  owl:annotatedSource ?class ;
+  owl:annotatedProperty owl:equivalentClass ;
+  owl:annotatedTarget ?eqclass ;
+  rdfs:comment ?co .
+  }
+
+  ?class rdfs:label ?label .
+  ?eqclass rdfs:label ?eqlabel . 
+  OPTIONAL { ?class rdfs:comment ?description . }
+  OPTIONAL { ?eqclass rdfs:comment ?eqdescription . }
+}
+
+}
+}
+
+ORDER BY  ?l  ?c ?f ?lbl ?cls ?dsc
+
+
