@@ -26,47 +26,9 @@ public class GraphDbRDF4j {
     // GraphDB
     private static final String GRAPHDB_SERVER = "http://localhost:7200/";
     private static final String REPOSITORY_ID = "skos_auto_core";
-    private static String strInsert;
-    private static String strInsert1;
     private static String strQuery;
 
     static {
-
-        strInsert =
-                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
-                    + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"
-                        + "INSERT DATA {\n"
-                            + "GRAPH <http://skos_auto/>{\n"
-                                + String.format("<http://skos_auto/%dConcept> <http://www.w3.org/2004/02/skos/core#broader> <http://skos_auto/FirstConcept> .", 5)
-                                + String.format("<http://skos_auto/%dConcept> rdf:type <http://www.w3.org/2004/02/skos/core#Concept> .", 5)
-
-                                + String.format("<http://skos_auto/%dConcept> skos:prefLabel ", 5)  + "\"" + String.format("%dConcept", 5) + "\"@en ."
-                                + String.format("<http://skos_auto/%dConcept> skos:altLabel ", 5) + "\"" + String.format("This is %d Concepts's altLabel", 5) + "\"@en ."
-                                + String.format("<http://skos_auto/%dConcept> skos:definition ", 5) + "\"" + String.format("This is the %d concept.", 5) + "\"@en ."
-                                + String.format("<http://skos_auto/%sConcept> skos:note ", 5) + "\"" + String.format("%s Concept's Note", 5) + "\"@en ."
-
-                                + String.format("<http://skos_auto/%sConcept> skos:inScheme <http://skos_auto/mainscheme> .", "5")
-
-                            + "}"
-                        + "}";
-
-        strInsert1 =
-                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
-                    + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"
-                    + "INSERT DATA {\n"
-                        + "GRAPH <http://skos_auto/>{\n"
-                            + "<http://skos_auto/4Concept> <http://www.w3.org/2004/02/skos/core#broader> <http://skos_auto/FirstConcept> ."
-                            + "<http://skos_auto/4Concept> rdf:type <http://www.w3.org/2004/02/skos/core#Concept> ."
-                            + "<http://skos_auto/4Concept> skos:prefLabel \"4Concept\"@en ."
-                            + "<http://skos_auto/4Concept> skos:altLabel \"This is 4 Concepts's altLabel\"@en ."
-                            + "<http://skos_auto/4Concept> skos:definition \"This is the 4 concept.\"@en ."
-                            + "<http://skos_auto/4Concept> skos:note \"4 Concept's Note\"@en ."
-
-                            + "<http://skos_auto/4Concept> skos:inScheme <http://skos_auto/mainscheme> ."
-
-                        + "}"
-                    + "}";
-
         strQuery =
                 "SELECT ?name FROM DEFAULT WHERE {" +
                         "?s <http://xmlns.com/foaf/0.1/name> ?name .}";
