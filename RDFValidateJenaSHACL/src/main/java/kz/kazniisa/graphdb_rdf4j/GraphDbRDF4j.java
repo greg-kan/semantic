@@ -24,7 +24,7 @@ public class GraphDbRDF4j {
     private static final Marker WTF_MARKER = MarkerFactory.getMarker("WTF");
 
     // GraphDB
-    private static final String GRAPHDB_SERVER = "http://localhost:7200/";
+    private static final String GRAPHDB_SERVER = "http://192.168.10.101:7200/";
     private static final String REPOSITORY_ID = "skos_auto_core";
     private static String strQuery;
 
