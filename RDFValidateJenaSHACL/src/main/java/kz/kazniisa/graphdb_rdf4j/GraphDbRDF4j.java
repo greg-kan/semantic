@@ -42,6 +42,7 @@ public class GraphDbRDF4j {
 
         String dict_en = "abcdefghijklmnopqrstuvwxyz"; //26
         String dict_ru = "абвгдежзиклмнопрстуфхцчшщыэюя"; // 29
+        String dict_kz = "аәбвгғдежзикқлмнңоөпрстуұүфхһцчшщыіэюя"; // 38
 
         Random rand = new Random();
 
@@ -95,11 +96,11 @@ public class GraphDbRDF4j {
     }
 
     private static void createConceptSchemas(RepositoryConnection repositoryConnection) {
-        createConceptSchema(repositoryConnection, "This is the First ConceptScheme", "Это первая схема понятий", "firstscheme");
-        createConceptSchema(repositoryConnection, "This is the Second ConceptScheme","Это вторая схема понятий",  "secondscheme");
-        createConceptSchema(repositoryConnection, "This is the Third ConceptScheme","Это третья схема понятий",  "thirdscheme");
-        createConceptSchema(repositoryConnection, "This is the Fourth ConceptScheme","Это четвертая схема понятий",  "fourthscheme");
-        createConceptSchema(repositoryConnection, "This is the Fifth ConceptScheme","Это пятая схема понятий",  "fifthscheme");
+        createConceptSchema(repositoryConnection, "First ConceptScheme", "Предметная область 1", "firstscheme");
+        createConceptSchema(repositoryConnection, "Second ConceptScheme","Предметная область 2",  "secondscheme");
+        createConceptSchema(repositoryConnection, "Third ConceptScheme","Предметная область 3",  "thirdscheme");
+        createConceptSchema(repositoryConnection, "Fourth ConceptScheme","Предметная область 4",  "fourthscheme");
+        createConceptSchema(repositoryConnection, "Fifth ConceptScheme","Предметная область 5",  "fifthscheme");
     }
 
     private static void createConceptSchema(RepositoryConnection repositoryConnection, String schemePrefLabel_en, String schemePrefLabel_ru, String schemeURI) {
