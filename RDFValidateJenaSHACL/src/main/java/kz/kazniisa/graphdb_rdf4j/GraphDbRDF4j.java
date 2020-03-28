@@ -28,7 +28,8 @@ public class GraphDbRDF4j {
 
     // GraphDB
     private static final String GRAPHDB_SERVER = "http://192.168.10.101:7200/";
-    private static final String REPOSITORY_ID = "skos_auto_s_core";
+    private static final String REPOSITORY_ID = "skos_auto_core";
+    private static final String PROJECT_IRI = "http://skos_auto/";
     private static String strQuery;
 
     static {
@@ -54,36 +55,43 @@ public class GraphDbRDF4j {
             int ix = rand.nextInt(29);
             res = dict_ru.charAt(ix);
         }
-
+        else if (c == 'k') {
+            int ix = rand.nextInt(38);
+            res = dict_kz.charAt(ix);
+        }
         return res;
     }
 
     private static String getStrInsert(int i, String conceptScheme) {
+        char p_e = generate_prefix('e');
+        char p_r = generate_prefix('r');
+        char p_k = generate_prefix('k');
+
         return
                 "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
                         + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"
                         + "INSERT DATA {\n"
-                        + "GRAPH <http://skos_auto_s/>{\n"
+                        + "GRAPH <" + PROJECT_IRI + ">{\n"
                         //+ String.format("<http://skos_auto_s/%dConcept> <http://www.w3.org/2004/02/skos/core#broader> <http://skos_auto_s/FirstConcept> .", i)
-                        + String.format("<http://skos_auto_s/%dConcept> rdf:type <http://www.w3.org/2004/02/skos/core#Concept> .", i)
+                        + String.format("<" + PROJECT_IRI + "%dConcept> rdf:type <http://www.w3.org/2004/02/skos/core#Concept> .", i)
 
-                        + String.format("<http://skos_auto_s/%dConcept> skos:prefLabel ", i)  + "\"" + generate_prefix('e') + String.format("%dConcept", i) + "\"@en ."
-                        + String.format("<http://skos_auto_s/%dConcept> skos:altLabel ", i) + "\"" + String.format("This is %d Concepts's altLabel", i) + "\"@en ."
-                        + String.format("<http://skos_auto_s/%dConcept> skos:definition ", i) + "\"" + String.format("This is the %d concept.", i) + "\"@en ."
-                        + String.format("<http://skos_auto_s/%dConcept> skos:note ", i) + "\"" + String.format("%d Concept's Note", i) + "\"@en ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:prefLabel ", i)  + "\"" + String.format("%c %d Concept", p_e, i) + "\"@en ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:altLabel ", i) + "\"" + String.format("This is %c %d Concepts's synonym", p_e, i) + "\"@en ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:definition ", i) + "\"" + String.format("Definition of the %c %d concept.", p_e, i) + "\"@en ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:note ", i) + "\"" + String.format("%c %d Concept's Note",  p_e, i) + "\"@en ."
 
-                        + String.format("<http://skos_auto_s/%dConcept> skos:prefLabel ", i)  + "\"" + generate_prefix('r') + String.format("%dКонцепт", i) + "\"@ru ."
-                        + String.format("<http://skos_auto_s/%dConcept> skos:altLabel ", i) + "\"" + String.format("Это %d Концепта altLabel", i) + "\"@ru ."
-                        + String.format("<http://skos_auto_s/%dConcept> skos:definition ", i) + "\"" + String.format("Это %d Концепта длинное определение.", i) + "\"@ru ."
-                        + String.format("<http://skos_auto_s/%dConcept> skos:note ", i) + "\"" + String.format("%d Концепта длинное замечание", i) + "\"@ru ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:prefLabel ", i)  + "\"" + String.format("%c %d Понятие", p_r, i) + "\"@ru ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:altLabel ", i) + "\"" + String.format("Синоним %c %d Понятия", p_r, i) + "\"@ru ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:definition ", i) + "\"" + String.format("Определение %c %d Понятия", p_r, i) + "\"@ru ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:note ", i) + "\"" + String.format("Замечание к %c %d Понятию", p_r, i) + "\"@ru ."
 
-//                        + String.format("<http://skos_auto_s/%dConcept> skos:prefLabel ", i)  + "\"" +  generate_prefix('r') + String.format("%dКонцепт", i) + "\"@kz ."
-//                        + String.format("<http://skos_auto_s/%dConcept> skos:altLabel ", i) + "\"" + String.format("Это %d Концепта altLabel", i) + "\"@kz ."
-//                        + String.format("<http://skos_auto_s/%dConcept> skos:definition ", i) + "\"" + String.format("Это %d Концепта длинное определение.", i) + "\"@kz ."
-//                        + String.format("<http://skos_auto_s/%dConcept> skos:note ", i) + "\"" + String.format("%d Концепта длинное замечание", i) + "\"@kz ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:prefLabel ", i)  + "\"" + String.format("%c %d Ұғым", p_k, i) + "\"@kz ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:altLabel ", i) + "\"" + String.format("%c %d Ұғымының синонимі", p_k, i) + "\"@kz ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:definition ", i) + "\"" + String.format("%c %d Үғымның анықтамасы", p_k, i) + "\"@kz ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> skos:note ", i) + "\"" + String.format("%c %d Үғымның жазба нота", p_k, i) + "\"@kz ."
 
-                        + String.format("<http://skos_auto_s/%dConcept> ", i) + "skos:inScheme <http://skos_auto_s/" + conceptScheme + "> ."
-                        + String.format("<http://skos_auto_s/%dConcept> ", i) + "skos:topConceptOf <http://skos_auto_s/" + conceptScheme + "> ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> ", i) + "skos:inScheme <" + PROJECT_IRI + conceptScheme + "> ."
+                        + String.format("<" + PROJECT_IRI + "%dConcept> ", i) + "skos:topConceptOf <" + PROJECT_IRI + conceptScheme + "> ."
 
                         + "}"
                         + "}";
@@ -96,22 +104,29 @@ public class GraphDbRDF4j {
     }
 
     private static void createConceptSchemas(RepositoryConnection repositoryConnection) {
-        createConceptSchema(repositoryConnection, "First ConceptScheme", "Предметная область 1", "firstscheme");
-        createConceptSchema(repositoryConnection, "Second ConceptScheme","Предметная область 2",  "secondscheme");
-        createConceptSchema(repositoryConnection, "Third ConceptScheme","Предметная область 3",  "thirdscheme");
-        createConceptSchema(repositoryConnection, "Fourth ConceptScheme","Предметная область 4",  "fourthscheme");
-        createConceptSchema(repositoryConnection, "Fifth ConceptScheme","Предметная область 5",  "fifthscheme");
+        createConceptSchema(repositoryConnection, "First ConceptScheme",
+                "Предметная область 1", "Пәндік аймақ 1", "firstscheme");
+        createConceptSchema(repositoryConnection, "Second ConceptScheme",
+                "Предметная область 2", "Пәндік аймақ 2", "secondscheme");
+        createConceptSchema(repositoryConnection, "Third ConceptScheme",
+                "Предметная область 3", "Пәндік аймақ 3", "thirdscheme");
+        createConceptSchema(repositoryConnection, "Fourth ConceptScheme",
+                "Предметная область 4", "Пәндік аймақ 4", "fourthscheme");
+        createConceptSchema(repositoryConnection, "Fifth ConceptScheme",
+                "Предметная область 5", "Пәндік аймақ 5", "fifthscheme");
     }
 
-    private static void createConceptSchema(RepositoryConnection repositoryConnection, String schemePrefLabel_en, String schemePrefLabel_ru, String schemeURI) {
+    private static void createConceptSchema(RepositoryConnection repositoryConnection, String schemePrefLabel_en,
+                                            String schemePrefLabel_ru, String schemePrefLabel_kz, String schemeURI) {
         String insertString =
                 "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
                         + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"
                         + "INSERT DATA {\n"
-                        + "GRAPH <http://skos_auto_s/>{\n"
-                        + "<http://skos_auto_s/" + schemeURI + "> rdf:type skos:ConceptScheme ."
-                        + "<http://skos_auto_s/" + schemeURI + "> <http://www.w3.org/2004/02/skos/core#prefLabel> \"" + schemePrefLabel_en + "\"@en ."
-                        + "<http://skos_auto_s/" + schemeURI + "> <http://www.w3.org/2004/02/skos/core#prefLabel> \"" + schemePrefLabel_ru + "\"@ru ."
+                        + "GRAPH <" + PROJECT_IRI + ">{\n"
+                        + "<" + PROJECT_IRI + schemeURI + "> rdf:type skos:ConceptScheme ."
+                        + "<" + PROJECT_IRI + schemeURI + "> <http://www.w3.org/2004/02/skos/core#prefLabel> \"" + schemePrefLabel_en + "\"@en ."
+                        + "<" + PROJECT_IRI + schemeURI + "> <http://www.w3.org/2004/02/skos/core#prefLabel> \"" + schemePrefLabel_ru + "\"@ru ."
+                        + "<" + PROJECT_IRI + schemeURI + "> <http://www.w3.org/2004/02/skos/core#prefLabel> \"" + schemePrefLabel_kz + "\"@kz ."
                         + "}"
                         + "}";
 
@@ -130,27 +145,27 @@ public class GraphDbRDF4j {
     private static void insert(RepositoryConnection repositoryConnection) {
         repositoryConnection.begin();
 
-        for (int i = 1001; i <= 1999; i++) {
+        for (int i = 10001; i <= 19999; i++) {
             Update updateOperation = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, getStrInsert(i, "firstscheme"));
             updateOperation.execute();
         }
 
-        for (int i = 2001; i <= 2999; i++) {
+        for (int i = 20001; i <= 29999; i++) {
             Update updateOperation = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, getStrInsert(i, "secondscheme"));
             updateOperation.execute();
         }
 
-        for (int i = 3001; i <= 3999; i++) {
+        for (int i = 30001; i <= 39999; i++) {
             Update updateOperation = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, getStrInsert(i, "thirdscheme"));
             updateOperation.execute();
         }
 
-        for (int i = 4001; i <= 4999; i++) {
+        for (int i = 40001; i <= 49999; i++) {
             Update updateOperation = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, getStrInsert(i, "fourthscheme"));
             updateOperation.execute();
         }
 
-        for (int i = 5001; i <= 5999; i++) {
+        for (int i = 50001; i <= 59999; i++) {
             Update updateOperation = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, getStrInsert(i, "fifthscheme"));
             updateOperation.execute();
         }
